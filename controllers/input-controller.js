@@ -9,17 +9,25 @@ const Opening = require('../models/opening');
 //CONTROLLER FUNCTIONS
 
 
-const getInputs = async (req, res, next) => {
+const getTestimonial = async (req, res, next) => {
 
-    let inputs;
+    let testimonial;
     try {
-        inputs = await Input.find({})
+        testimonial = await Testimonial.find({})
     } catch (err) {
         return next(new HttpError(
             'Something went wrong on our side. Please try again later',
             500
         ))
     }
+
+
+
+    res.json({ testimonial: testimonial[0] });
+
+}
+
+const getOpeningTime = async (req, res, next) => {
 
     let opening;
     try {
@@ -31,7 +39,7 @@ const getInputs = async (req, res, next) => {
         ))
     }
 
-    res.json({ inputs: inputs, opening: opening });
+    res.json({ opening: opening[0] });
 
 }
 
@@ -103,6 +111,7 @@ const updateTestimonial = async (req, res, next) => {
 
 // EXPORTS
 
-exports.getInputs = getInputs;
+exports.getTestimonial = getTestimonial;
+exports.getOpeningTime = getOpeningTime;
 exports.updateOpeningTime = updateOpeningTime;
 exports.updateTestimonial = updateTestimonial;

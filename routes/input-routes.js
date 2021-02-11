@@ -9,7 +9,8 @@ const router = express.Router();
 
 
 // get all input resources for the website rendering
-router.get('/', inputController.getInputs);
+router.get('/testimonial', inputController.getTestimonial);
+router.get('/openingtime', inputController.getOpeningTime);
 
 
 
