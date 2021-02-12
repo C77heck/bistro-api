@@ -17,13 +17,13 @@ router.get('/openingtime', inputController.getOpeningTime);
 // opening time handler
 
 router.patch('/openingtime', [
-    check('monday').not().isEmpty().escape().trim(),
-    check('tuesday').not().isEmpty().escape().trim(),
-    check('wednesday').not().isEmpty().escape().trim(),
-    check('thursday').not().isEmpty().escape().trim(),
-    check('friday').not().isEmpty().escape().trim(),
-    check('saturday').not().isEmpty().escape().trim(),
-    check('sunday').not().isEmpty().escape().trim()
+    check('monday').escape().trim(),
+    check('tuesday').escape().trim(),
+    check('wednesday').escape().trim(),
+    check('thursday').escape().trim(),
+    check('friday').escape().trim(),
+    check('saturday').escape().trim(),
+    check('sunday').escape().trim()
 ], inputController.updateOpeningTime);
 
 // chef about us text
