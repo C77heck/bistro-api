@@ -40,7 +40,7 @@ const createMenuItem = async (req, res, next) => {
     const { name, description, price, type } = req.body;
     const newItem = new Menu({
         name: name,
-        description: description,
+        description: description.length>0? description: '',
         price: price,
         type: type
     })
