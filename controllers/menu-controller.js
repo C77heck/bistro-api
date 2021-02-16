@@ -40,7 +40,7 @@ const createMenuItem = async (req, res, next) => {
     const { name, description, price, type } = req.body;
     const newItem = new Menu({
         name: name,
-        description: description.length>0? description: '',
+        description: description.length > 0 ? description : '',
         price: price,
         type: type
     })
@@ -88,7 +88,7 @@ const updateItem = async (req, res, next) => {
         ))
     }
 
-    res.status(201).json({ message: 'item has been succesfully updated' })
+    res.status(201).json({ message: 'A változások sikeresen mentésre kerültek.' })
 
 
 }
@@ -103,8 +103,8 @@ const deleteItem = async (req, res, next) => {
         ))
     }
 
-    const { id } = req.body;
-
+    const id = req.param.pid;
+    console.log('we are in', req.param.pid)
     //admin authentication to implement...
     let item;
     try {
@@ -124,7 +124,7 @@ const deleteItem = async (req, res, next) => {
         ))
     };
 
-    res.status(201).json({ message: 'succesfully deleted' });
+    res.status(201).json({ message: 'Törlés sikeres.' });
 }
 
 // EXPORTS

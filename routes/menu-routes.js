@@ -10,7 +10,7 @@ const router = express.Router();
 router.get('/', menuController.getMenuItems);
 
 
-router.post('/newItem', [
+router.post('/newitem', [
     check('name').not().isEmpty().escape().trim(),
     check('description').not().isEmpty().escape().trim(),
     check('price').not().isEmpty().escape().trim(),
@@ -18,8 +18,8 @@ router.post('/newItem', [
 ], menuController.createMenuItem);
 //perhaps rework the input from description to make it the right form in all cases.
 
-router.patch('/updateItem', [   
-     check('id').not().isEmpty().escape().trim(),
+router.patch('/updateitem', [
+    check('id').not().isEmpty().escape().trim(),
     check('name').escape().trim(),
     check('description').escape().trim(),
     check('price').escape().trim(),
@@ -27,9 +27,7 @@ router.patch('/updateItem', [
 ], menuController.updateItem);
 //perhaps this will bug out for the validation so check back later
 
-router.delete('/deleteItem', [
-    check('id').not().isEmpty().escape().trim()
-], menuController.deleteItem);
+router.delete('/deleteitem/:pid', menuController.deleteItem);
 
 
 
