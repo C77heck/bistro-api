@@ -13,8 +13,7 @@ const openingSchema = new Schema({
     thursday: { type: String, require: true },
     friday: { type: String, require: true },
     saturday: { type: String, require: true },
-    sunday: { type: String, require: true },
-    date: { type: String, require: true }
+    sunday: { type: String, require: true }
 })
 
 

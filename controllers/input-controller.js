@@ -3,11 +3,27 @@ const { validationResult } = require('express-validator');
 const HttpError = require('../models/http-error');
 const Testimonial = require('../models/testimonial');
 const Opening = require('../models/opening');
+const Story = require('../models/story');
+const Expiry = require('../models/expiry');
 
 
 
 //CONTROLLER FUNCTIONS
 
+const getExpiries = async (req, res, next) => {
+    let expiries;
+    try {
+        expiries = await Expiry.find({});
+    } catch (err) {
+        return next(new HttpError(
+            'Something went wrong on server side',
+            500
+        ))
+    }
+
+    res.json({ expiries: expiries[0] })
+
+}
 
 const getTestimonial = async (req, res, next) => {
 
@@ -21,9 +37,18 @@ const getTestimonial = async (req, res, next) => {
         ))
     }
 
+    let expiries;
+    try {
+        expiries = await Expiry.find({});
+    } catch (err) {
+        return next(new HttpError(
+            'Something went wrong on server side',
+            500
+        ))
+    }
 
 
-    res.json({ testimonial: testimonial[0] });
+    res.json({ testimonial: testimonial[0], expiry: expiries[0].testimonial });
 
 }
 
@@ -39,7 +64,17 @@ const getOpeningTime = async (req, res, next) => {
         ))
     }
 
-    res.json({ opening: opening[0] });
+    let expiries;
+    try {
+        expiries = await Expiry.find({});
+    } catch (err) {
+        return next(new HttpError(
+            'Something went wrong on server side',
+            500
+        ))
+    }
+
+    res.json({ opening: opening[0], expiry: expiries[0].opening });
 
 }
 
@@ -75,6 +110,28 @@ const updateOpeningTime = async (req, res, next) => {
             500
         ))
     }
+    /*  we register the new creation date so the front end can fetch and
+         save to locale storage upon next visit */
+    let expiries;
+    try {
+        expiries = await Expiry.find({});
+    } catch (err) {
+        return next(new HttpError(
+            'Sikertelen probalkozás, kérlek póbáld meg késöbb.',
+            500
+        ))
+    }
+
+    expiries[0].opening = new Date().getTime();
+    try {
+        expiries[0].save();
+    } catch (err) {
+        return next(new HttpError(
+            'Sikertelen probalkozás, kérlek póbáld meg késöbb.',
+            500
+        ))
+    }
+
 
     res.status(201).json({ message: 'A nyitvatartás sikeresen frissítve lett. ' })
 
@@ -110,7 +167,116 @@ const updateTestimonial = async (req, res, next) => {
         ))
     }
 
+
+    /*  we register the new creation date so the front end can fetch and
+     save to locale storage upon next visit */
+    let expiries;
+    try {
+        expiries = await Expiry.find({});
+    } catch (err) {
+        return next(new HttpError(
+            'Sikertelen probalkozás, kérlek póbáld meg késöbb.',
+            500
+        ))
+    }
+
+    expiries[0].testimonial = new Date().getTime();
+    try {
+        expiries[0].save();
+    } catch (err) {
+        return next(new HttpError(
+            'Sikertelen probalkozás, kérlek póbáld meg késöbb.',
+            500
+        ))
+    }
+
     res.status(201).json({ message: 'Rólunk szekció sikeresen frissítve.' });
+}
+
+const getStories = async (req, res, next) => {
+
+    let story;
+    try {
+        story = await Story.find({})
+    } catch (err) {
+        return next(new HttpError(
+            'Sorry something went wrong on our side.',
+            500
+        ))
+    }
+
+    let expiries;
+    try {
+        expiries = await Expiry.find({});
+    } catch (err) {
+        return next(new HttpError(
+            'Something went wrong on server side',
+            500
+        ))
+    }
+
+    res.json({ story: story[0], expiry: expiries[0].story });
+};
+
+
+
+const updateStory = async (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        console.log(errors, req.body)
+        return next(new HttpError(
+            'Helytelen adat, kérlek ellenőrízd és próbáld ujra.',
+            422
+        ))
+    }
+
+    const {
+        firsth2,
+        firsth3,
+        firstp,
+        secondh2,
+        secondp
+    } = req.body;
+
+    try {
+        await Story.replaceOne({}, {
+            firsth2,
+            firsth3,
+            firstp,
+            secondh2,
+            secondp
+        })
+    } catch (err) {
+        return next(new HttpError(
+            'Sikertelen probalkozás, kérlek póbáld meg késöbb.',
+            500
+        ))
+    }
+
+
+    /*  we register the new creation date so the front end can fetch and
+ save to locale storage upon next visit */
+    let expiries;
+    try {
+        expiries = await Expiry.find({});
+    } catch (err) {
+        return next(new HttpError(
+            'Sikertelen probalkozás, kérlek póbáld meg késöbb.',
+            500
+        ))
+    }
+
+    expiries[0].story = new Date().getTime();
+    try {
+        expiries[0].save();
+    } catch (err) {
+        return next(new HttpError(
+            'Sikertelen probalkozás, kérlek póbáld meg késöbb.',
+            500
+        ))
+    }
+
+    res.status(201).json({ message: 'Változtatás sikeres.' })
 }
 
 // EXPORTS
@@ -119,3 +285,6 @@ exports.getTestimonial = getTestimonial;
 exports.getOpeningTime = getOpeningTime;
 exports.updateOpeningTime = updateOpeningTime;
 exports.updateTestimonial = updateTestimonial;
+exports.updateStory = updateStory;
+exports.getStories = getStories;
+exports.getExpiries = getExpiries

@@ -2,17 +2,18 @@ const express = require('express');
 const { check } = require('express-validator');
 
 const menuController = require('../controllers/menu-controller');
-const menu = require('../models/menu');
+const checkAuth = require('../middleware/check-auth');
 
 const router = express.Router();
 
 
 router.get('/', menuController.getMenuItems);
 
+router.use(checkAuth);
 
 router.post('/newitem', [
     check('name').not().isEmpty().escape().trim(),
-    check('description').not().isEmpty().escape().trim(),
+    check('description').escape().trim(),
     check('price').not().isEmpty().escape().trim(),
     check('type').not().isEmpty().escape().trim(),
 ], menuController.createMenuItem);
@@ -27,7 +28,11 @@ router.patch('/updateitem', [
 ], menuController.updateItem);
 //perhaps this will bug out for the validation so check back later
 
-router.delete('/deleteitem/:pid', menuController.deleteItem);
+router.delete('/deleteitem/', [
+    check('*').not().isEmpty().escape()
+],
+    menuController.deleteItem
+);
 
 
 

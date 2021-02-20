@@ -11,7 +11,7 @@ const mongoose = require('mongoose');
 //ROUTES
 const menuRoutes = require('./routes/menu-routes');
 const inputRoutes = require('./routes/input-routes');
-
+const adminRoutes = require('./routes/admin-routes');
 
 //MIDDLEWARE
 const app = express();
@@ -32,6 +32,7 @@ mongoose.set('useCreateIndex', true);
 
 app.use('/api/menu', menuRoutes);
 app.use('/api/resources', inputRoutes);
+app.use('/api/admin', adminRoutes);
 
 //HANDLING INCORRECT ENDPOINTS ENTRY ATTEMPTS
 app.use(() => {

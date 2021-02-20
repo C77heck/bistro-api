@@ -2,6 +2,7 @@ const { validationResult } = require('express-validator');
 
 const HttpError = require('../models/http-error');
 const Menu = require('../models/menu');
+const Expiry = require('../models/expiry');
 
 
 
@@ -20,8 +21,17 @@ const getMenuItems = async (req, res, next) => {
         ))
     }
 
+    let expiries;
+    try {
+        expiries = await Expiry.find({});
+    } catch (err) {
+        return next(new HttpError(
+            `Something went wrong on server side`,
+            500
+        ))
+    }
 
-    res.json({ menu: menu });
+    res.json({ menu: menu, expiry: expiries[0].menu });
     //delete the message 
 }
 
@@ -30,7 +40,7 @@ const createMenuItem = async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
         return next(new HttpError(
-            'Invalid inputs passed, please check your data',
+            'Helytelen adat, kérlek ellenőrízd és próbáld ujra.',
             422
         ))
     }
@@ -51,12 +61,36 @@ const createMenuItem = async (req, res, next) => {
 
     } catch (err) {
         return next(new HttpError(
-            'Creating product failed, please try again.',
+            'Sikertelen próbálkozás, kérlek próbáld meg késöbb.',
             500
         ))
     }
 
-    res.status(201).json({ message: 'Product has been added.', item: newItem })
+    /*  we register the new creation date so the front end can fetch and
+     save to locale storage upon next visit */
+    let expiries;
+    try {
+        expiries = await Expiry.find({});
+    } catch (err) {
+        return next(new HttpError(
+            'Sikertelen probalkozás, kérlek póbáld meg késöbb.',
+            500
+        ))
+    }
+
+    expiries[0].menu = new Date().getTime();
+    try {
+        expiries[0].save();
+    } catch (err) {
+        return next(new HttpError(
+            'Sikertelen probalkozás, kérlek póbáld meg késöbb.',
+            500
+        ))
+    }
+
+
+
+    res.status(201).json({ message: 'Sikeresen hozzáadva.', item: newItem })
     //remove the item return
 
 }
@@ -65,7 +99,7 @@ const updateItem = async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
         return next(new HttpError(
-            'Invalid inputs passed, please check your data',
+            'Helytelen adat, kérlek ellenőrízd és próbáld ujra.',
             422
         ))
     }
@@ -83,8 +117,31 @@ const updateItem = async (req, res, next) => {
         })
     } catch (err) {
         return next(new HttpError(
-            'Sorry but this product is not in our database',
+            'Sikertelen update, kérlek próbáld meg késöbb.',
             404
+        ))
+    }
+
+
+    /*  we register the new creation date so the front end can fetch and
+     save to locale storage upon next visit */
+    let expiries;
+    try {
+        expiries = await Expiry.find({});
+    } catch (err) {
+        return next(new HttpError(
+            'Sikertelen probalkozás, kérlek póbáld meg késöbb.',
+            500
+        ))
+    }
+
+    expiries[0].menu = new Date().getTime();
+    try {
+        expiries[0].save();
+    } catch (err) {
+        return next(new HttpError(
+            'Sikertelen probalkozás, kérlek póbáld meg késöbb.',
+            500
         ))
     }
 
@@ -98,31 +155,50 @@ const deleteItem = async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
         return next(new HttpError(
-            'Invalid inputs passed, please check your data',
+            'Helytelen adat, kérlek ellenőrízd és próbáld ujra.',
             422
         ))
     }
 
-    const id = req.param.pid;
-    console.log('we are in', req.param.pid)
+    const { id, name } = req.body;
     //admin authentication to implement...
-    let item;
+
     try {
-        item = await Menu.findById(id)
+        if (id !== undefined) {
+            await Menu.deleteOne({ _id: id })
+        } else {
+            await Menu.deleteOne({ name: name })
+
+        }
     } catch (err) {
         return next(new HttpError(
-            'Could not delete item, please try again.',
+            'Sikertelen törlés, kérlek próbáld meg mégegyszer.1',
             500
         ))
     };
+
+
+    /*  we register the new creation date so the front end can fetch and
+     save to locale storage upon next visit */
+    let expiries;
     try {
-        await Menu.deleteOne({ _id: id })
+        expiries = await Expiry.find({});
     } catch (err) {
         return next(new HttpError(
-            'Could not delete item, please try again.',
+            'Sikertelen probalkozás, kérlek póbáld meg késöbb.2',
             500
         ))
-    };
+    }
+
+    expiries[0].menu = new Date().getTime();
+    try {
+        expiries[0].save();
+    } catch (err) {
+        return next(new HttpError(
+            `Sikertelen probalkozás, kérlek póbáld meg késöbb. ${err}`,
+            500
+        ))
+    }
 
     res.status(201).json({ message: 'Törlés sikeres.' });
 }
