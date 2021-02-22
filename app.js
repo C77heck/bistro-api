@@ -18,6 +18,8 @@ const app = express();
 app.use(bodyParser.json())
 
 app.use('/uploads/images', express.static(path.join('uploads', 'images')));
+// SERVING THE REACT APP 
+app.use(express.static(path.join('public')));
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
@@ -34,10 +36,15 @@ app.use('/api/menu', menuRoutes);
 app.use('/api/resources', inputRoutes);
 app.use('/api/admin', adminRoutes);
 
+app.use((req, res, next) => {
+    res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
+})
+
+
 //HANDLING INCORRECT ENDPOINTS ENTRY ATTEMPTS
-app.use(() => {
+/* app.use(() => {
     throw new HttpError('Could not find this route.', 404);
-});
+}); */
 
 // DELETING UPLOADED IMAGES FROM THE FILESYSTEM
 app.use((error, req, res, next) => {

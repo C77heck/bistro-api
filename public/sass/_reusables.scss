@@ -1,0 +1,197 @@
+.heading-primary {
+    color: var(--color-text-dark);
+    text-transform: uppercase;
+    backface-visibility: hidden;
+    margin-bottom: 3rem;
+}
+.heading-secondary {
+    font-size: 3.5rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    display: inline-block;
+    color: var(--color-text-dark);
+    -webkit-background-clip: text;
+    letter-spacing: 2px;
+
+    @media screen and (max-width: $desktop) {
+        font-size: 3rem;
+    }
+    @media screen and (max-width: $tablet) {
+        font-size: 3.5rem;
+    }
+    @media screen and (max-width: $mobile) {
+        font-size: 2rem;
+    }
+}
+.heading-tertiary {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--color-text-dark);
+    @media screen and (max-width: $mobile) {
+        font-size: 1.7rem;
+    }
+}
+.heading-fourth {
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--color-text-dark);
+    padding-left: 2rem;
+}
+.heading-italic {
+    font-size: 2rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--color-text-dark);
+    padding-left: 2rem;
+}
+.paragraph {
+    font-size: 1.3rem;
+    color: var(--color-text-light);
+
+    &:not(:last-child) {
+        margin-bottom: 3rem;
+    }
+    &--menu {
+        font-size: 1.6rem;
+        &:not(:last-child) {
+            margin: 0;
+            padding: 0;
+        }
+    }
+    @media screen and (max-width: $mobile) {
+        font-size: 1.5rem;
+        &--testimonial {
+            padding: 1rem;
+            font-size: 1.2rem;
+        }
+    }
+}
+.btn-text {
+    &:link,
+    &:visited {
+        font-size: 1.9rem;
+        color: var(--color-primary-dark);
+        display: inline-block;
+        text-decoration: none;
+        border: 2px solid var(--color-primary-dark);
+        border-right: hidden;
+        border-left: hidden;
+
+        padding: 2rem;
+        transition: all 0.2s;
+        border-radius: 200px;
+    }
+
+    &:hover {
+        background-color: var(--color-primary-dark);
+        color: var(--color-grey-light-1);
+        box-shadow: 0 1rem 2rem rgba(grey, 0.15);
+        transform: translateY(-2px);
+    }
+
+    &:active {
+        box-shadow: 0 0.5rem 1rem rgba(grey, 0.15);
+        transform: translateY(0);
+    }
+    // STYLING CLASSES
+    .white-text {
+        color: white !important;
+    }
+    &--mobile,
+    &--mobile:link,
+    &--mobile:visited {
+        background-color: var(--color-primary-dark);
+        color: var(--color-grey-light-1);
+        @media screen and(max-width:24em) {
+            background-color: transparent;
+            color: var(--color-primary-dark);
+            border-top: hidden;
+        }
+        &:active {
+            transform: scale(1.1);
+        }
+    }
+}
+
+.btn--add {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    border: rgb(60, 128, 190) 1px solid;
+    outline: none;
+    background-color: #3dbebe;
+    color: white;
+    position: absolute;
+    right: -1rem;
+    top: -2rem;
+    font-size: 3rem;
+    font-weight: 900;
+    transition: all 200ms;
+    &:hover {
+        background-color: rgb(20, 85, 207);
+        border: white 1px solid;
+    }
+    &:active {
+        transform: scale(1.02);
+    }
+}
+
+.btn--save {
+    outline: none;
+    border: none;
+    width: 8rem;
+    height: 4rem;
+    border-radius: 50rem;
+    background-color: #298412;
+    color: wheat;
+    transition: all 200ms;
+    &:hover {
+        background-color: #19460e;
+    }
+    &:active {
+        transform: scale(1.02);
+    }
+}
+
+.btn--delete {
+    outline: none;
+    border: none;
+    width: 8rem;
+    height: 4rem;
+    border-radius: 50rem;
+    background-color: #a73b3b;
+    color: wheat;
+    transition: all 200ms;
+    &:hover {
+        background-color: #740101;
+    }
+    &:active {
+        transform: scale(1.02);
+    }
+}
+
+.btn--cancel {
+    outline: none;
+    border: none;
+    width: 8rem;
+    height: 4rem;
+    border-radius: 50rem;
+    background-color: #7a6503;
+    color: wheat;
+    transition: all 200ms;
+    &:hover {
+        background-color: #a58700;
+    }
+    &:active {
+        transform: scale(1.02);
+    }
+}
+
+.hr-line {
+    width: 100%;
+    height: 1.5px;
+    margin: 3rem 0 2rem;
+    box-shadow: 0 1rem 0.8rem #75c22e;
+    background-color: #75c22e;
+}
