@@ -26,7 +26,6 @@ router.patch('/openingtime', [
 // chef about us text
 
 router.patch('/testimonial',
-    fileUpload.single('image'),
     [
         check('quote').not().isEmpty().isLength({ min: 15, max: 40 }).escape().trim(),
         check('text').isLength({ min: 100, max: 750 }).escape().trim()

@@ -152,10 +152,8 @@ const updateTestimonial = async (req, res, next) => {
 
     //admin authentication to implement...
     const updatedFile = {
-        image: req.file.path,
         quote: quote,
         text: text,
-        date: new Date()
     }
 
     try {
