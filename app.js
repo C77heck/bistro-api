@@ -19,9 +19,6 @@ app.use(bodyParser.json())
 
 app.use('/uploads/images', express.static(path.join('uploads', 'images')));
 
-//app.use(express.static(path.join('public')));
-
-
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
@@ -37,11 +34,10 @@ app.use('/api/menu', menuRoutes);
 app.use('/api/resources', inputRoutes);
 app.use('/api/admin', adminRoutes);
 
-// HANDLING THE REACT ROUTING BY ALWAYS SENDING BACK THE index.html on different routes
-app.use((req, res, next) => {
-    res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
-})
-
+//HANDLING INCORRECT ENDPOINTS ENTRY ATTEMPTS
+app.use(() => {
+    throw new HttpError('Could not find this route.', 404);
+});
 
 // DELETING UPLOADED IMAGES FROM THE FILESYSTEM
 app.use((error, req, res, next) => {
