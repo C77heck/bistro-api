@@ -178,7 +178,7 @@ const signout = async (req, res, next) => {
     let user;
 
     try {
-        user = await User.findById(userId)
+        user = await Admin.findById(userId)
     } catch (err) {
         console.log(err)
     }
