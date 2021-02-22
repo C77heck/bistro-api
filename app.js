@@ -19,10 +19,15 @@ app.use(bodyParser.json())
 
 app.use('/uploads/images', express.static(path.join('uploads', 'images')));
 
-// SERVING THE REACT APP STATICALLY.
-app.use(express.static(path.join('public')));
+//app.use(express.static(path.join('public')));
 
 
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
+    res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PATCH, DELETE')
+    next()
+})
 mongoose.set('useCreateIndex', true);
 
 
