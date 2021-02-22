@@ -13,7 +13,7 @@ module.exports = async (req, res, next) => {
         const token = req.headers.authorization.split(' ')[1];
 
         if (!token) {
-            throw new Error('Authentication failed!1')
+            throw new Error('Síkertelen admin azonosítás!')
         }
 
         const decodedToken = jwt.verify(token, process.env.JWT_KEY)
@@ -23,7 +23,7 @@ module.exports = async (req, res, next) => {
 
     } catch (err) {
         return next(new HttpError(
-            'Authentication failed!2',
+            'Síkertelen admin azonosítás!',
             401
         ))
     }
@@ -34,14 +34,14 @@ module.exports = async (req, res, next) => {
         admin = await Admin.find({})
     } catch (err) {
         return next(new HttpError(
-            'Authentication failed!3',
+            'Síkertelen admin azonosítás!',
             401
         ))
     }
 
     if (!admin[0].status.isLoggedIn) {
         throw new HttpError(
-            'Authentication failed!4',
+            'Síkertelen admin azonosítás!',
             401
         )
     } else {
